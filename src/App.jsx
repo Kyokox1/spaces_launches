@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-	fetchAllLaunches,
-	fetchLaunchesByFlightNumber
-} from "./services/launches_fetch";
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { fetchAllLaunches, fetchLaunchesByFlightNumber } from "./services/launches_fetch";
+import { Box, Flex, Heading, Spacer, Tag, Text } from "@chakra-ui/react";
+import { FaCalendarAlt } from "react-icons/fa";
+import dayjs from 'dayjs'
+// import "dayjs/locale/es" //*Por si quieren las fechas en español
 
 export const App = () => {
 	const [launches, setLaunches] = useState([]);
@@ -27,18 +27,35 @@ export const App = () => {
 							m="4"
 							borderRadius="lg"
 						>
-							<Flex display="flex">
+							<Flex>
 								<Text fontSize="2xl">
 									Mission <strong> {launch.mission_name}</strong> (
 									{launch.launch_year})
 								</Text>
+								<Spacer />
+								<Tag
+									colorScheme={
+										launch.launch_success ? "green" : "red"
+									}
+									p="4"
+								>
+									{launch.launch_success ? "Sucess" : "Failure"}
+								</Tag>
 							</Flex>
-              {launch.mission_name} ({launch.launch_year})
+							<Flex align="center" py="2">
+								<FaCalendarAlt />
+								<Text fontSize="sm" ml={2}>
+									{dayjs(launch.launch_date_locale).format(
+										"DD MMMM, YYYY"
+									)}
+									{/* .locale("es") */}
+								</Text>
+							</Flex>
 						</Box>
 					))}
 				</section>
 			) : (
-				<h3>cargando...</h3>
+				<h3>Loading...</h3>
 			)}
 		</>
 	);
